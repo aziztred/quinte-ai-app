@@ -1,26 +1,23 @@
-    
-name: Build Android APK
+
+name: Build APK
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    container:
-      image: kivy/buildozer:latest
+    runs-on: ubuntu-22.04
 
     steps:
-      - name: Fix git safe directory
-        run: git config --global --add safe.directory '*'
-
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build Android APK
-        run: yes | buildozer android debug
+      - name: Build with Buildozer
+        uses: digidigital/buildozer-action@v1.0.2
+        with:
+          command: buildozer android debug
+          repository_root: .
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
